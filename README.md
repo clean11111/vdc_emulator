@@ -1,2 +1,2 @@
-# vdc_emualtor
+# vdc_emulator
 This is repository for VDC Emulator 
