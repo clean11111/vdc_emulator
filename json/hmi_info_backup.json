@@ -1,0 +1,308 @@
+{
+    "notifyUpdatesScheduled": {
+        "notifyUpdatesScheduledRequest": {
+            "interfaceVersion": "test",
+            "messageData": {
+                "notifyUpdatesScheduledRequestPayload": {
+                    "campaignId": ["test"],
+                    "originatorId": "test"
+                }
+            },
+            "transactionId": "test"
+        }
+    },
+    "notifyUpdatesScheduledToInstall": {
+        "notifyUpdatesScheduledToInstallRequest": {
+            "interfaceVersion": "test",
+            "messageData": {
+                "campaignId": ["test"]
+            },
+            "transactionId": "test"
+        }
+    },
+    "notifyUpdatesToBeScheduled": {
+        "notifyUpdatesToBeScheduledRequest": {
+            "interfaceVersion": "test",
+            "messageData": {
+                "campaignId": ["test"]
+            },
+            "transactionId": "test"
+        }
+    },
+    "notifyUserPresentChangeStatus": {
+        "notifyUserPresentChangeStatusRequest": {
+            "interfaceVersion": "test",
+            "messageData": {
+                "userPresentInVehicle": "present"
+            },
+            "transactionId": "test"
+        }
+    },
+    "notifyInstallationResult": {
+        "notifyInstallationResultRequest": {
+            "interfaceVersion": "test",
+            "messageData": {
+                "campaignId": "0"
+            },
+            "transactionId": "test"
+        }
+    },
+    "notifyUpdatesChangeStatus": {
+        "notifyUpdatesChangeStatusRequest": {
+            "interfaceVersion": "test",
+            "messageData": ["0"],
+            "transactionId": "test"
+        }
+    },
+    "notifyVehicleChangeLanguage": {
+        "notifyVehicleLanguageChangeResponse": {
+            "interfaceVersion": "test",
+            "messageData": {
+                "errorGeneralErrorResponse": "noError"
+            },
+            "transactionId": "test"
+        }
+    },
+    "getCurrentSOTAInstalledSoftware": {
+        "getCurrentSOTAInstalledSoftwareResponse": {
+            "interfaceVersion": "test",
+            "messageData": {
+                "getCurrentSOTAInstalledSoftwareResponsePayload": {
+                    "currentSoftwareComponent": [{
+                            "publisherName": "test",
+                            "installDate": "2018/08/31 09:29",
+                            "name": "test",
+                            "campaignLongDescription": ["test"],
+                            "campaignSummary": ["test"]
+                        },
+                        {
+                            "publisherName": "test",
+                            "installDate": "2018/08/31 09:29",
+                            "name": "test",
+                            "campaignLongDescription": ["test"],
+                            "campaignSummary": ["test"]
+                        }
+                    ],
+                    "legalContactDetails": {
+                        "contactAddress": ["test"],
+                        "contactNumber": "test",
+                        "contactEmail": "test"
+                    },
+                    "errorGeneralErrorResponse": "noError"
+                }
+            },
+            "transactionId": "test"
+        }
+    },
+    "getInstallationResult": {
+        "getInstallationResultResponse": {
+            "interfaceVersion": "test",
+            "messageData": {
+                "getInstallationResultResponsePayload": {
+                    "softwareUpdateInstallationResultDetails": {
+                        "campaignId": "test",
+                        "campaignDescription": ["test"],
+                        "campaignInstallationResultType": "complete",
+                        "installationNotAttemptedReason": "test",
+                        "errorInstallFailureDriveableStatus": "nonDrivable",
+                        "campaignName": "test"
+                    },
+                    "errorGeneralErrorResponse": "noError"
+                }
+            },
+            "transactionId": "test"
+        }
+    },
+    "getJLRContactDetails": {
+        "getJLRContactDetailsResponse": {
+            "interfaceVersion": "test",
+            "messageData": {
+                "getJLRContactDetailsResponsePayload": {
+                    "JLRContactDetails": {
+                        "contactJLREmail": "test",
+                        "contactJLRPhoneNumber": "test",
+                        "contactJLRRegion": "test"
+                    },
+                    "errorGeneralErrorResponse": "noError"
+                }
+            },
+            "transactionId": "test"
+        }
+    },
+    "getPreferencesVehicle": {
+        "getPreferencesVehicleResponse": {
+            "interfaceVersion": "test",
+            "messageData": {
+                "getPreferencesVehicleResponsePayload": {
+                    "preferencesVehicle": {
+                        "defaultInstallTime": {
+                            "defaultInstallStartTime": {
+                                "time": {
+                                    "hh": 12,
+                                    "mm": 34
+                                }
+                            }
+                        },
+                        "inVehicleScheduling": true
+                    },
+                    "errorGeneralErrorResponse": "noError"
+                }
+            },
+            "transactionId": "test"
+        }
+    },
+    "getSoftwareUpdateInformation": {
+        "getSoftwareUpdateInformationResponse": {
+            "interfaceVersion": "test",
+            "messageData": {
+                "getSoftwareUpdateInformationResponsePayload": {
+                    "softwareUpdateInformation": [
+                        {
+                            "softwareUpdate": {
+                                "vehicleId": "test",
+                                "operationId": "test",
+                                "campaignId": "test",
+                                "campaignName": "test",
+                                "campaignPriority": "High",
+                                "campaignTCs": ["test"],
+                                "campaignInformationURL": "test",
+                                "campaignInstallNotCommencedReason": "test",
+                                "conditionsForInstall": ["test"],
+                                "softwareUpdateStatus": "toBeScheduled",
+                                "estimatedInstallationTime": {
+                                    "time": {
+                                        "hh": 12,
+                                        "mm": 34
+                                    }
+                                },
+                                "authorisationStatus": "notAuthorised",
+                                "vehicleSchedulePreference": "true",
+                                "campaignVersionNumber": "test",
+                                "campaignFileSize": "test",
+                                "campaignPublisher": "test",
+                                "campaignDescription": ["test"],
+                                "campaignSummary": ["test"],
+                                "campaignEndDate": "2018/08/31 09:29",
+                                "campaignSchedule": "2018/08/31 09:29",
+                                "campaignStartDate": "2018/08/31 09:29",
+                                "installationStartTime": "2018/08/31 09:29",
+                                "proposedInstallationTime": "2018/08/31 09:29"
+                            }
+                        }
+                    ],
+                    "errorGeneralErrorResponse": "noError"
+                }
+            },
+            "transactionId": "test"
+        }
+    },
+    "getTCsResult": {
+        "getTCsResultResponse": {
+            "interfaceVersion": "test",
+            "messageData": {
+                "getTCsResultResponsePayload": {
+                    "TCsStatus": "reject",
+                    "errorGeneralErrorResponse": "noError"
+                }
+            },
+            "transactionId": "test"
+        }
+    },
+    "getVehicleLanguage": {
+        "getVehicleLanguageRequest": {
+            "interfaceVersion": "test",
+            "transactionId": "test"
+        }
+    },
+    "setPreferencesVehicle": {
+        "setPreferencesVehicleResponse": {
+            "interfaceVersion": "test",
+            "messageData": {
+                "errorGeneralErrorResponse": "noError"
+            },
+            "transactionId": "test"
+        }
+    },
+    "setTCsResult": {
+        "setTCsResultResponse": {
+            "interfaceVersion": "test",
+            "messageData": {
+                "TCsStatus": "accept",
+                "errorGeneralErrorResponse": "noError"
+            },
+            "transactionId": "test"
+        }
+    },
+    "SoftwareVersion": {
+        "SoftwareVersionRequest": {
+            "header": {
+                "interfaceVersion": "test",
+                "transactionId": "test"
+            }
+        }
+    },
+    "StartFileTransfer": {
+        "startFileTransferRequest": {
+            "header": {
+                "interfaceVersion": "test",
+                "transactionId": "test"
+            },
+            "filePath": "/Swupgrade.tar.gz"
+        }
+    },
+    "FileTransferStatus": {
+        "fileTransferStatusRequest": {
+            "header": {
+                "interfaceVersion": "test",
+                "transactionId": "test"
+            }
+        }
+    },
+    "FileTransferComplete": {
+        "fileTransferCompleteResponse": {
+            "header": {
+                "interfaceVersion": "test",
+                "transactionId": "test"
+            },
+            "response": "OK"
+        }
+    },
+    "InstallSoftware": {
+        "installRequest": {
+            "header": {
+                "interfaceVersion": "test",
+                "transactionId": "test"
+            },
+            "softwarePartNumber": "String",
+            "version": "String",
+            "size": "1234567",
+            "co-Ordinated": "Bool"
+        }
+    },
+    "InstallStatus": {
+        "installStatusRequest": {
+            "header": {
+                "interfaceVersion": "test",
+                "transactionId": "test"
+            }
+        }
+    },
+    "InstallComplete": {
+        "installCompleteResponse": {
+            "header": {
+                "interfaceVersion": "test",
+                "transactionId": "test"
+            },
+            "response": "OK"
+        }
+    },
+    "ActivationComplete": {
+        "ActivationCompleteResponse": {
+            "header": {
+                "interfaceVersion": "test",
+                "transactionId": "test"
+            }
+        },
+        "result": "OK"
+    }
+}
