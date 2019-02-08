@@ -7,9 +7,11 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QNetworkInterface>
 #include <QWidget>
 #include "QtWebSockets/QWebSocket"
 #include "QtWebSockets/QWebSocketServer"
+
 #include <unistd.h>
 #include <iostream>
 #include <string>
@@ -58,7 +60,6 @@ public slots:
     void setUnscheduleUpdate();
     void setUpdateAuthorisation();
     void setUpdateNotification();
-    void SoftwareVersion();
     void StartFileTransfer();
     void FileTransferStatus();
     void FileTransferComplete();
@@ -66,6 +67,7 @@ public slots:
     void InstallStatus();
     void InstallComplete();
     void ActivationComplete();
+    void Test();
 
 private Q_SLOTS:
     void onNewConnection();
@@ -103,7 +105,6 @@ private:
     QPushButton *getVehicleLanguageButton;
     QPushButton *setPreferencesVehicleButton;
     QPushButton *setTCsResultButton;
-    QPushButton *SoftwareVersionButton;
     QPushButton *StartFileTransferButton;
     QPushButton *FileTransferStatusButton;
     QPushButton *FileTransferCompleteButton;
@@ -111,6 +112,7 @@ private:
     QPushButton *InstallStatusButton;
     QPushButton *InstallCompleteButton;
     QPushButton *ActivationCompleteButton;
+    QPushButton *TestButton;
     QWebSocketServer *m_pWebSocketServer;
     QWebSocket *pSocket;
     QList<QWebSocket *> m_clients;

@@ -76,7 +76,6 @@ MainWindow::MainWindow(QWidget *parent)
     HMIbuttonLayout->addStretch();
 
     QVBoxLayout *SystembuttonLayout = new QVBoxLayout;
-    SoftwareVersionButton = new QPushButton(tr("&SoftwareVersion"));
     StartFileTransferButton = new QPushButton(tr("&StartFileTransfer"));
     FileTransferStatusButton = new QPushButton(tr("&FileTransferStatus"));
     FileTransferCompleteButton = new QPushButton(tr("&FileTransferComplete"));
@@ -84,7 +83,7 @@ MainWindow::MainWindow(QWidget *parent)
     InstallStatusButton = new QPushButton(tr("&InstallStatus"));
     InstallCompleteButton = new QPushButton(tr("&InstallComplete"));
     ActivationCompleteButton = new QPushButton(tr("&ActivationComplete"));
-    SystembuttonLayout->addWidget(SoftwareVersionButton);
+    TestButton = new QPushButton(tr("&Test"));
     SystembuttonLayout->addWidget(StartFileTransferButton);
     SystembuttonLayout->addWidget(FileTransferStatusButton);
     SystembuttonLayout->addWidget(FileTransferCompleteButton);
@@ -92,6 +91,7 @@ MainWindow::MainWindow(QWidget *parent)
     SystembuttonLayout->addWidget(InstallStatusButton);
     SystembuttonLayout->addWidget(InstallCompleteButton);
     SystembuttonLayout->addWidget(ActivationCompleteButton);
+    SystembuttonLayout->addWidget(TestButton);
     SystembuttonLayout->addStretch();
 
     QGridLayout *mainLayout = new QGridLayout;
@@ -133,7 +133,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(getVehicleLanguageButton, SIGNAL(clicked()), this, SLOT(getVehicleLanguage()));
     connect(setPreferencesVehicleButton, SIGNAL(clicked()), this, SLOT(setPreferencesVehicle()));
     connect(setTCsResultButton, SIGNAL(clicked()), this, SLOT(setTCsResult()));
-    connect(SoftwareVersionButton, SIGNAL(clicked()), this, SLOT(SoftwareVersion()));
     connect(StartFileTransferButton, SIGNAL(clicked()), this, SLOT(StartFileTransfer()));
     connect(FileTransferStatusButton, SIGNAL(clicked()), this, SLOT(FileTransferStatus()));
     connect(FileTransferCompleteButton, SIGNAL(clicked()), this, SLOT(FileTransferComplete()));
@@ -141,6 +140,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(InstallStatusButton, SIGNAL(clicked()), this, SLOT(InstallStatus()));
     connect(InstallCompleteButton, SIGNAL(clicked()), this, SLOT(InstallComplete()));
     connect(ActivationCompleteButton, SIGNAL(clicked()), this, SLOT(ActivationComplete()));
+    connect(TestButton, SIGNAL(clicked()), this, SLOT(Test()));
 }
 
 MainWindow::~MainWindow()
@@ -258,7 +258,7 @@ void MainWindow::ParseEvent(std::string key)
         notifyVehicleLanguageChange();
     } else if(key.compare("InstallCompleteRequest") == 0) {
         InstallComplete();
-    } else if(key.compare("activationcompleterequest") == 0) {
+    } else if(key.compare("activationCompleteRequest") == 0) {
         ActivationComplete();
     } else {
         return;
@@ -272,14 +272,22 @@ void MainWindow::StartServer()
                                               QWebSocketServer::NonSecureMode,
                                               this);
 
-    if (m_pWebSocketServer->listen(QHostAddress::Any, 80))
+    quint16 port;
+    if(hmi_info["portnumber"].empty() == true) {
+        port = 80;
+    } else {
+        port = hmi_info["portnumber"].asUInt64();
+    }
+
+    if (m_pWebSocketServer->listen(QHostAddress::Any, port))
     {        
-        qDebug() << "VDC Test Server listening on port";
-        serverState->setText(tr("Listening"));
+        qDebug() << "VDC Test Server listening on port :" << m_pWebSocketServer->serverPort();
+        QString temp = tr("Listening Port : ") + QString::number(m_pWebSocketServer->serverPort());
+        serverState->setText(temp);
         connect(m_pWebSocketServer, &QWebSocketServer::newConnection,
                 this, &MainWindow::onNewConnection);
     } else {
-        //
+        serverState->setText(tr("Listening is failed"));
     }
 }
 
@@ -425,6 +433,8 @@ void MainWindow::setTCsResult()
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
+
+    hmi_info["getTCsResult"]["getTCsResultResponse"]["messageData"]["getTCsResultResponsePayload"]["TCsStatus"] = "accept";
 }
 
 void MainWindow::setUpdateSchedule()
@@ -458,19 +468,13 @@ void MainWindow::setUpdateAuthorisation()
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
+
+    hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["authorisationStatus"] = "authorised";
 }
 
 void MainWindow::setUpdateNotification()
 {
     Json::Value root = hmi_info["setUpdateNotification"];
-    str = styledWriter.write(root);
-    sendText->clear();
-    sendText->setText(QString::fromStdString(str));
-}
-
-void MainWindow::SoftwareVersion()
-{
-    Json::Value root = hmi_info["SoftwareVersion"];
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -527,6 +531,14 @@ void MainWindow::InstallComplete()
 void MainWindow::ActivationComplete()
 {
     Json::Value root = hmi_info["ActivationComplete"];
+    str = styledWriter.write(root);
+    sendText->clear();
+    sendText->setText(QString::fromStdString(str));
+}
+
+void MainWindow::Test()
+{
+    Json::Value root = hmi_info["Test"];
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
