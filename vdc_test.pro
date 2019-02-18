@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets websockets
+QT       += core gui widgets websockets network
 CONFIG += c++11
 TARGET = vdc_test
 TEMPLATE = app
@@ -33,4 +33,5 @@ HEADERS += \
 OTHER_FILES += json/*
 
 DISTFILES += \
-    json/hmi_info_array.json
+    json/hmi_info_array.json \
+    json/hmi_info_IP13_temp.json

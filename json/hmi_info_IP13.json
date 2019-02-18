@@ -62,8 +62,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "errorGeneralErrorResponse": "noError"
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "getCurrentSOTAInstalledSoftware": {
@@ -72,18 +71,13 @@
             "messageData": {
                 "getCurrentSOTAInstalledSoftwareResponsePayload": {
                     "currentSoftwareComponent": [{
-                            "publisherName": "test",
-                            "installDate": "2018-12-31T09:29+00:00",
-                            "name": "test",
-                            "campaignLongDescription": ["test"],
-                            "campaignSummary": ["test"]
-                        },
-                        {
-                            "publisherName": "test",
-                            "installDate": "2018-12-31T09:29+00:00",
-                            "name": "test",
-                            "campaignLongDescription": ["test"],
-                            "campaignSummary": ["test"]
+                            "installedSOTAComponentDetails": {
+                                "publisherName": "test",
+                                "installDate": "2018-12-31T09:29+00:00",
+                                "name": "test",
+                                "campaignLongDescription": ["test"],
+                                "campaignSummary": ["test"]
+                            }
                         }
                     ],
                     "JLRLegalDetails" : {
@@ -95,8 +89,7 @@
                     },
                     "errorGeneralErrorResponse": "noError"
                 }
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "getInstallationResult": {
@@ -114,8 +107,7 @@
                     },
                     "errorGeneralErrorResponse": "noError"
                 }
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "getJLRContactDetails": {
@@ -130,8 +122,7 @@
                     },
                     "errorGeneralErrorResponse": "noError"
                 }
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "getPreferencesVehicle": {
@@ -152,8 +143,7 @@
                     },
                     "errorGeneralErrorResponse": "noError"
                 }
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "getSoftwareUpdateInformation": {
@@ -189,15 +179,13 @@
                                 "campaignEndDate": "2018-12-31T09:29+00:00",
                                 "campaignSchedule": "2018-12-31T09:29+00:00",
                                 "campaignStartDate": "2018-12-31T09:29+00:00",
-                                "installationStartTime": "2018-12-31T09:29+00:00",
                                 "proposedInstallationTime": "2018-12-31T09:29+00:00"
                             }
                         }
                     ],
                     "errorGeneralErrorResponse": "noError"
                 }
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "getTCsResult": {
@@ -208,8 +196,7 @@
                     "TCsStatus": "reject",
                     "errorGeneralErrorResponse": "noError"
                 }
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "getVehicleLanguage": {
@@ -223,8 +210,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "errorGeneralErrorResponse": "noError"
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "setTCsResult": {
@@ -232,8 +218,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "errorGeneralErrorResponse": "noError"
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "setUpdateSchedule": {
@@ -241,9 +226,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "errorGeneralErrorResponse": "noError"
-            },
-            "transactionId": "1000"
-
+            }
         }
     },
     "setSoftwareUpdateInstallImmediate": {
@@ -251,9 +234,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "errorGeneralErrorResponse": "noError"
-            },
-            "transactionId": "1000"
-
+            }
         }
     },
     "setUnscheduleUpdate": {
@@ -261,9 +242,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "errorGeneralErrorResponse": "noError"
-            },
-            "transactionId": "1000"
-
+            }
         }
     },
     "setUpdateAuthorisation": {
@@ -271,9 +250,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "errorGeneralErrorResponse": "noError"
-            },
-            "transactionId": "1000"
-
+            }
         }
     },
     "setUpdateNotification": {
@@ -281,9 +258,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "errorGeneralErrorResponse": "noError"
-            },
-            "transactionId": "1000"
-
+            }
         }
     },
     "StartFileTransfer": {
@@ -306,8 +281,7 @@
     "FileTransferComplete": {
         "fileTransferCompleteResponse": {
             "header": {
-                "interfaceVersion": "1.0",
-                "transactionId": "1000"
+                "interfaceVersion": "1.0"
             },
             "response": "OK"
         }
@@ -335,8 +309,7 @@
     "InstallComplete": {
         "installCompleteResponse": {
             "header": {
-                "interfaceVersion": "1.0",
-                "transactionId": "1000"
+                "interfaceVersion": "1.0"
             },
             "response": "OK"
         }
@@ -344,8 +317,7 @@
     "ActivationComplete": {
         "activationCompleteResponse": {
             "header": {
-                "interfaceVersion": "1.0",
-                "transactionId": "1000"
+                "interfaceVersion": "1.0"
             }
         },
         "result": "OK"

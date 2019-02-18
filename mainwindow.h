@@ -78,6 +78,7 @@ private:
     Json::Value hmi_info;
     Json::StyledWriter styledWriter;
     std::string str;
+    std::string transactionId;
 
     QJsonObject jsonObj;
     QLineEdit *serverState;

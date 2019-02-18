@@ -175,7 +175,10 @@ void MainWindow::processTextMessage(QString message)
         Json::Value root;
         parse_result = reader.parse(message.toStdString(), root);
         if(parse_result == true) {
-            ParseEvent(root.getMemberNames().at(0));
+            std::string headername = root.getMemberNames().at(0);
+            transactionId = root[headername]["transactionId"].asString();
+            ParseEvent(headername);
+            qDebug() << QString::fromStdString(transactionId);
         }
     }
 }
@@ -306,7 +309,6 @@ void MainWindow::Clear()
 
 void MainWindow::notifyUpdatesScheduled()
 {
-    qDebug() << "Press notifyUpdatesScheduled";
     Json::Value root = hmi_info["notifyUpdatesScheduled"];
     str = styledWriter.write(root);
     sendText->clear();
@@ -315,7 +317,6 @@ void MainWindow::notifyUpdatesScheduled()
 
 void MainWindow::notifyUpdatesScheduledToInstall()
 {
-    qDebug() << "Press notifyUpdatesScheduledToInstall";
     Json::Value root = hmi_info["notifyUpdatesScheduledToInstall"];
     str = styledWriter.write(root);
     sendText->clear();
@@ -324,7 +325,6 @@ void MainWindow::notifyUpdatesScheduledToInstall()
 
 void MainWindow::notifyUpdatesToBeScheduled()
 {
-    qDebug() << "Press notifyUpdatesToBeScheduled";
     Json::Value root = hmi_info["notifyUpdatesToBeScheduled"];
     str = styledWriter.write(root);
     sendText->clear();
@@ -358,6 +358,7 @@ void MainWindow::notifyUpdatesChangeStatus()
 void MainWindow::notifyVehicleLanguageChange()
 {
     Json::Value root = hmi_info["notifyVehicleChangeLanguage"];
+    root["notifyVehicleLanguageChangeResponse"]["transactionId"] = transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -366,6 +367,8 @@ void MainWindow::notifyVehicleLanguageChange()
 void MainWindow::getCurrentSOTAInstalledSoftware()
 {
     Json::Value root = hmi_info["getCurrentSOTAInstalledSoftware"];
+    root["getCurrentSOTAInstalledSoftwareResponse"]["transactionId"] = transactionId;
+    qDebug() << "Test : " << QString::fromStdString(root["getCurrentSOTAInstalledSoftwareResponse"]["transactionId"].asString());
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -374,6 +377,7 @@ void MainWindow::getCurrentSOTAInstalledSoftware()
 void MainWindow::getInstallationResult()
 {
     Json::Value root = hmi_info["getInstallationResult"];
+    root["getInstallationResultResponse"]["transactionId"] = transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -382,6 +386,7 @@ void MainWindow::getInstallationResult()
 void MainWindow::getJLRContactDetails()
 {
     Json::Value root = hmi_info["getJLRContactDetails"];
+    root["getJLRContactDetailsResponse"]["transactionId"] = transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -390,6 +395,7 @@ void MainWindow::getJLRContactDetails()
 void MainWindow::getPreferencesVehicle()
 {
     Json::Value root = hmi_info["getPreferencesVehicle"];
+    root["getPreferencesVehicleResponse"]["transactionId"] = transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -398,6 +404,7 @@ void MainWindow::getPreferencesVehicle()
 void MainWindow::getSoftwareUpdateInformation()
 {
     Json::Value root = hmi_info["getSoftwareUpdateInformation"];
+    root["getSoftwareUpdateInformationResponse"]["transactionId"] = transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -406,6 +413,7 @@ void MainWindow::getSoftwareUpdateInformation()
 void MainWindow::getTCsResult()
 {
     Json::Value root = hmi_info["getTCsResult"];
+    root["getTCsResultResponse"]["transactionId"] = transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -422,6 +430,7 @@ void MainWindow::getVehicleLanguage()
 void MainWindow::setPreferencesVehicle()
 {
     Json::Value root = hmi_info["setPreferencesVehicle"];
+    root["setPreferencesVehicleResponse"]["transactionId"] = transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -430,6 +439,7 @@ void MainWindow::setPreferencesVehicle()
 void MainWindow::setTCsResult()
 {
     Json::Value root = hmi_info["setTCsResult"];
+    root["setTCsResultResponse"]["transactionId"] = transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -440,6 +450,7 @@ void MainWindow::setTCsResult()
 void MainWindow::setUpdateSchedule()
 {
     Json::Value root = hmi_info["setUpdateSchedule"];
+    root["setUpdateScheduleResponse"]["transactionId"] = transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -448,7 +459,7 @@ void MainWindow::setUpdateSchedule()
 void MainWindow::setSoftwareUpdateInstallImmediate()
 {
     Json::Value root = hmi_info["setSoftwareUpdateInstallImmediate"];
-    qDebug() << QString::fromStdString(root["setSoftwareUpdateInstallImmediateResponse"]["messageData"]["errorGeneralErrorResponse"].asString());
+    root["setSoftwareUpdateInstallImmediateResponse"]["transactionId"] = transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -465,6 +476,7 @@ void MainWindow::setUnscheduleUpdate()
 void MainWindow::setUpdateAuthorisation()
 {
     Json::Value root = hmi_info["setUpdateAuthorisation"];
+    root["setUpdateAuthorisationResponse"]["transactionId"] = transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -499,6 +511,7 @@ void MainWindow::FileTransferStatus()
 void MainWindow::FileTransferComplete()
 {
     Json::Value root = hmi_info["FileTransferComplete"];
+    root["fileTransferCompleteResponse"]["header"]["transactionId"] = transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -523,6 +536,7 @@ void MainWindow::InstallStatus()
 void MainWindow::InstallComplete()
 {
     Json::Value root = hmi_info["InstallComplete"];
+    root["installCompleteResponse"]["header"]["transactionId"] = transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -531,6 +545,7 @@ void MainWindow::InstallComplete()
 void MainWindow::ActivationComplete()
 {
     Json::Value root = hmi_info["ActivationComplete"];
+    root["activationCompleteResponse"]["header"]["transactionId"] = transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
