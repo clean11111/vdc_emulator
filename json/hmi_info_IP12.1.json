@@ -4,10 +4,8 @@
         "notifyUpdatesScheduledRequest": {
             "interfaceVersion": "1.0",
             "messageData": {
-                "notifyUpdatesScheduledRequestPayload": {
-                    "campaignId": ["test"],
-                    "originatorId": "test"
-                }
+                "campaignId": ["test"],
+                "originatorId": "test"
             },
             "transactionId": "1000"
         }

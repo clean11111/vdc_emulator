@@ -1,3 +1,7 @@
+/* Version History
+ * 1.9 : change softwarestatus value, when user touch notifyupdate message
+*/
+
 #include <QtWidgets>
 #include "mainwindow.h"
 
@@ -49,7 +53,6 @@ MainWindow::MainWindow(QWidget *parent)
     notifyVehicleLanguageChangeButton = new QPushButton(tr("&NotifyVehicleLanguageChange"));
     getCurrentSOTAInstalledSoftwareButton = new QPushButton(tr("&GetCurrentSOTAInstalledSoftware"));
     getInstallationResultButton = new QPushButton(tr("&GetInstallationResult"));
-    getJLRContactDetailsButton = new QPushButton(tr("&GetJLRContactDetails"));
     getPreferencesVehicleButton = new QPushButton(tr("&GetPreferencesVehicle"));
     getSoftwareUpdateInformationButton = new QPushButton(tr("&GetSoftwareUpdateInformation"));
     getTCsResultButton = new QPushButton(tr("&GetTCsResult"));
@@ -66,7 +69,6 @@ MainWindow::MainWindow(QWidget *parent)
     HMIbuttonLayout->addWidget(notifyVehicleLanguageChangeButton);
     HMIbuttonLayout->addWidget(getCurrentSOTAInstalledSoftwareButton);
     HMIbuttonLayout->addWidget(getInstallationResultButton);
-    HMIbuttonLayout->addWidget(getJLRContactDetailsButton);
     HMIbuttonLayout->addWidget(getPreferencesVehicleButton);
     HMIbuttonLayout->addWidget(getSoftwareUpdateInformationButton);
     HMIbuttonLayout->addWidget(getTCsResultButton);
@@ -126,7 +128,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(notifyVehicleLanguageChangeButton, SIGNAL(clicked()), this, SLOT(notifyVehicleLanguageChange()));
     connect(getCurrentSOTAInstalledSoftwareButton, SIGNAL(clicked()), this, SLOT(getCurrentSOTAInstalledSoftware()));
     connect(getInstallationResultButton, SIGNAL(clicked()), this, SLOT(getInstallationResult()));
-    connect(getJLRContactDetailsButton, SIGNAL(clicked()), this, SLOT(getJLRContactDetails()));
     connect(getPreferencesVehicleButton, SIGNAL(clicked()), this, SLOT(getPreferencesVehicle()));
     connect(getSoftwareUpdateInformationButton, SIGNAL(clicked()), this, SLOT(getSoftwareUpdateInformation()));
     connect(getTCsResultButton, SIGNAL(clicked()), this, SLOT(getTCsResult()));
@@ -175,10 +176,7 @@ void MainWindow::processTextMessage(QString message)
         Json::Value root;
         parse_result = reader.parse(message.toStdString(), root);
         if(parse_result == true) {
-            std::string headername = root.getMemberNames().at(0);
-            transactionId = root[headername]["transactionId"].asString();
-            ParseEvent(headername);
-            qDebug() << QString::fromStdString(transactionId);
+            ParseEvent(root);
         }
     }
 }
@@ -226,15 +224,16 @@ void MainWindow::loadJSON()
     }
 }
 
-void MainWindow::ParseEvent(std::string key)
+void MainWindow::ParseEvent(const Json::Value &request)
 {
-    qDebug() << QString::fromStdString(key);
+    std::string key = request.getMemberNames().at(0);
+    transactionId = request[key]["transactionId"].asString();
+    qDebug() << QString::fromStdString(key) << " " << QString::fromStdString(transactionId);
+
     if(key.compare("getCurrentSOTAInstalledSoftwareRequest") == 0) {
         getCurrentSOTAInstalledSoftware();
     } else if(key.compare("getInstallationResultRequest") == 0) {
         getInstallationResult();
-    } else if(key.compare("getJLRContactDetailsRequest") == 0) {
-        getJLRContactDetails();
     } else if(key.compare("getPreferencesVehicleRequest") == 0) {
         getPreferencesVehicle();
     } else if(key.compare("getSoftwareUpdateInformationRequest") == 0) {
@@ -244,7 +243,7 @@ void MainWindow::ParseEvent(std::string key)
     } else if(key.compare("setPreferencesVehicleRequest") == 0) {
         setPreferencesVehicle();
     } else if(key.compare("setTCsResultRequest") == 0) {
-        setTCsResult();
+        setTCsResult(request);
     } else if(key.compare("setUpdateScheduleRequest") == 0) {
         setUpdateSchedule();
     } else if(key.compare("setSoftwareUpdateInstallImmediateRequest") == 0) {
@@ -313,6 +312,7 @@ void MainWindow::notifyUpdatesScheduled()
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
+    hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["softwareUpdateStatus"] = "scheduled";
 }
 
 void MainWindow::notifyUpdatesScheduledToInstall()
@@ -321,6 +321,7 @@ void MainWindow::notifyUpdatesScheduledToInstall()
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
+    hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["softwareUpdateStatus"] = "toBeRescheduled";
 }
 
 void MainWindow::notifyUpdatesToBeScheduled()
@@ -329,6 +330,7 @@ void MainWindow::notifyUpdatesToBeScheduled()
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
+    hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["softwareUpdateStatus"] = "toBeScheduled";
 }
 
 void MainWindow::notifyUserPresentChangeStatus()
@@ -383,15 +385,6 @@ void MainWindow::getInstallationResult()
     sendText->setText(QString::fromStdString(str));
 }
 
-void MainWindow::getJLRContactDetails()
-{
-    Json::Value root = hmi_info["getJLRContactDetails"];
-    root["getJLRContactDetailsResponse"]["transactionId"] = transactionId;
-    str = styledWriter.write(root);
-    sendText->clear();
-    sendText->setText(QString::fromStdString(str));
-}
-
 void MainWindow::getPreferencesVehicle()
 {
     Json::Value root = hmi_info["getPreferencesVehicle"];
@@ -436,15 +429,14 @@ void MainWindow::setPreferencesVehicle()
     sendText->setText(QString::fromStdString(str));
 }
 
-void MainWindow::setTCsResult()
+void MainWindow::setTCsResult(const Json::Value &request)
 {
     Json::Value root = hmi_info["setTCsResult"];
     root["setTCsResultResponse"]["transactionId"] = transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
-
-    hmi_info["getTCsResult"]["getTCsResultResponse"]["messageData"]["getTCsResultResponsePayload"]["TCsStatus"] = "accept";
+    hmi_info["getTCsResult"]["getTCsResultResponse"]["messageData"]["getTCsResultResponsePayload"]["TCsStatus"] = request["setTCsResultRequest"]["messageData"]["TCsStatus"];
 }
 
 void MainWindow::setUpdateSchedule()
@@ -480,7 +472,6 @@ void MainWindow::setUpdateAuthorisation()
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
-
     hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["authorisationStatus"] = "authorised";
 }
 

@@ -110,21 +110,6 @@
             }
         }
     },
-    "getJLRContactDetails": {
-        "getJLRContactDetailsResponse": {
-            "interfaceVersion": "1.0",
-            "messageData": {
-                "getJLRContactDetailsResponsePayload": {
-                    "JLRContactDetails": {
-                        "contactJLREmail": "test",
-                        "contactJLRPhoneNumber": "test",
-                        "contactJLRRegion": "test"
-                    },
-                    "errorGeneralErrorResponse": "noError"
-                }
-            }
-        }
-    },
     "getPreferencesVehicle": {
         "getPreferencesVehicleResponse": {
             "interfaceVersion": "1.0",
@@ -162,7 +147,7 @@
                                 "campaignTCs": ["test"],
                                 "campaignInformationURL": "test",
                                 "campaignInstallNotCommencedReason": "test",
-                                "softwareUpdateStatus": "inProgress",
+                                "softwareUpdateStatus": "toBeScheduled",
                                 "estimatedInstallationTime": {
                                     "time": {
                                         "hh": 12,
@@ -179,7 +164,7 @@
                                 "campaignEndDate": "2018-12-31T09:29+00:00",
                                 "campaignSchedule": "2018-12-31T09:29+00:00",
                                 "campaignStartDate": "2018-12-31T09:29+00:00",
-                                "proposedInstallationTime": "2018-12-31T09:29+00:00"
+                                "proposedInstallationTime": "idle"
                             }
                         }
                     ],
@@ -253,21 +238,13 @@
             }
         }
     },
-    "setUpdateNotification": {
-        "setUpdateNotificationResponse": {
-            "interfaceVersion": "1.0",
-            "messageData": {
-                "errorGeneralErrorResponse": "noError"
-            }
-        }
-    },
     "StartFileTransfer": {
         "startFileTransferRequest": {
             "header": {
                 "interfaceVersion": "1.0",
                 "transactionId": "1000"
             },
-            "filePath": "/Swupgrade.tar.gz"
+            "filePath": "/pivi_iccm/"
         }
     },
     "FileTransferStatus": {

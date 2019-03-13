@@ -32,7 +32,7 @@ class MainWindow : public QWidget
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void ParseEvent(std::string key);
+    void ParseEvent(const Json::Value &request);
 
 public slots:
     void StartServer();
@@ -48,13 +48,12 @@ public slots:
     void notifyVehicleLanguageChange();
     void getCurrentSOTAInstalledSoftware();
     void getInstallationResult();
-    void getJLRContactDetails();
     void getPreferencesVehicle();
     void getSoftwareUpdateInformation();
     void getTCsResult();
     void getVehicleLanguage();
     void setPreferencesVehicle();
-    void setTCsResult();
+    void setTCsResult(const Json::Value &request);
     void setUpdateSchedule();
     void setSoftwareUpdateInstallImmediate();
     void setUnscheduleUpdate();
@@ -99,7 +98,6 @@ private:
     QPushButton *notifyVehicleLanguageChangeButton;
     QPushButton *getCurrentSOTAInstalledSoftwareButton;
     QPushButton *getInstallationResultButton;
-    QPushButton *getJLRContactDetailsButton;
     QPushButton *getPreferencesVehicleButton;
     QPushButton *getSoftwareUpdateInformationButton;
     QPushButton *getTCsResultButton;
