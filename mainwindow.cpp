@@ -1,5 +1,6 @@
 /* Version History
  * 1.9 : change softwarestatus value, when user touch notifyupdate message
+ * 2.0 : add code to handle transactionId from VDC to PIVI
 */
 
 #include <QtWidgets>
@@ -8,6 +9,8 @@
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
 {
+    srand((unsigned int)time(NULL));
+    vdc_transactionId = rand() % 10000;
     QLabel *serverStateLabel = new QLabel(tr("Server State :"));
     serverState = new QLineEdit;
     serverState->setPlaceholderText(tr("Not Initialized"));
@@ -227,8 +230,8 @@ void MainWindow::loadJSON()
 void MainWindow::ParseEvent(const Json::Value &request)
 {
     std::string key = request.getMemberNames().at(0);
-    transactionId = request[key]["transactionId"].asString();
-    qDebug() << QString::fromStdString(key) << " " << QString::fromStdString(transactionId);
+    pivi_transactionId = request[key]["transactionId"].asString();
+    qDebug() << QString::fromStdString(key) << " " << QString::fromStdString(pivi_transactionId);
 
     if(key.compare("getCurrentSOTAInstalledSoftwareRequest") == 0) {
         getCurrentSOTAInstalledSoftware();
@@ -309,6 +312,7 @@ void MainWindow::Clear()
 void MainWindow::notifyUpdatesScheduled()
 {
     Json::Value root = hmi_info["notifyUpdatesScheduled"];
+    root["notifyUpdatesScheduledRequest"]["transactionId"] = std::to_string(++vdc_transactionId);
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -318,6 +322,7 @@ void MainWindow::notifyUpdatesScheduled()
 void MainWindow::notifyUpdatesScheduledToInstall()
 {
     Json::Value root = hmi_info["notifyUpdatesScheduledToInstall"];
+    root["notifyUpdatesScheduledToInstallRequest"]["transactionId"] = std::to_string(++vdc_transactionId);
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -327,6 +332,7 @@ void MainWindow::notifyUpdatesScheduledToInstall()
 void MainWindow::notifyUpdatesToBeScheduled()
 {
     Json::Value root = hmi_info["notifyUpdatesToBeScheduled"];
+    root["notifyUpdatesToBeScheduledRequest"]["transactionId"] = std::to_string(++vdc_transactionId);
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -336,6 +342,7 @@ void MainWindow::notifyUpdatesToBeScheduled()
 void MainWindow::notifyUserPresentChangeStatus()
 {
     Json::Value root = hmi_info["notifyUserPresentChangeStatus"];
+    root["notifyUserPresentChangeStatusRequest"]["transactionId"] = std::to_string(++vdc_transactionId);
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -344,6 +351,7 @@ void MainWindow::notifyUserPresentChangeStatus()
 void MainWindow::notifyInstallationResult()
 {
     Json::Value root = hmi_info["notifyInstallationResult"];
+    root["notifyInstallationResultRequest"]["transactionId"] = std::to_string(++vdc_transactionId);
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -352,6 +360,7 @@ void MainWindow::notifyInstallationResult()
 void MainWindow::notifyUpdatesChangeStatus()
 {
     Json::Value root = hmi_info["notifyUpdatesChangeStatus"];
+    root["notifyUpdatesChangeStatusRequest"]["transactionId"] = std::to_string(++vdc_transactionId);
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -360,7 +369,7 @@ void MainWindow::notifyUpdatesChangeStatus()
 void MainWindow::notifyVehicleLanguageChange()
 {
     Json::Value root = hmi_info["notifyVehicleChangeLanguage"];
-    root["notifyVehicleLanguageChangeResponse"]["transactionId"] = transactionId;
+    root["notifyVehicleLanguageChangeResponse"]["transactionId"] = pivi_transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -369,8 +378,7 @@ void MainWindow::notifyVehicleLanguageChange()
 void MainWindow::getCurrentSOTAInstalledSoftware()
 {
     Json::Value root = hmi_info["getCurrentSOTAInstalledSoftware"];
-    root["getCurrentSOTAInstalledSoftwareResponse"]["transactionId"] = transactionId;
-    qDebug() << "Test : " << QString::fromStdString(root["getCurrentSOTAInstalledSoftwareResponse"]["transactionId"].asString());
+    root["getCurrentSOTAInstalledSoftwareResponse"]["transactionId"] = pivi_transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -379,7 +387,7 @@ void MainWindow::getCurrentSOTAInstalledSoftware()
 void MainWindow::getInstallationResult()
 {
     Json::Value root = hmi_info["getInstallationResult"];
-    root["getInstallationResultResponse"]["transactionId"] = transactionId;
+    root["getInstallationResultResponse"]["transactionId"] = pivi_transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -388,7 +396,7 @@ void MainWindow::getInstallationResult()
 void MainWindow::getPreferencesVehicle()
 {
     Json::Value root = hmi_info["getPreferencesVehicle"];
-    root["getPreferencesVehicleResponse"]["transactionId"] = transactionId;
+    root["getPreferencesVehicleResponse"]["transactionId"] = pivi_transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -397,7 +405,7 @@ void MainWindow::getPreferencesVehicle()
 void MainWindow::getSoftwareUpdateInformation()
 {
     Json::Value root = hmi_info["getSoftwareUpdateInformation"];
-    root["getSoftwareUpdateInformationResponse"]["transactionId"] = transactionId;
+    root["getSoftwareUpdateInformationResponse"]["transactionId"] = pivi_transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -406,7 +414,7 @@ void MainWindow::getSoftwareUpdateInformation()
 void MainWindow::getTCsResult()
 {
     Json::Value root = hmi_info["getTCsResult"];
-    root["getTCsResultResponse"]["transactionId"] = transactionId;
+    root["getTCsResultResponse"]["transactionId"] = pivi_transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -415,6 +423,7 @@ void MainWindow::getTCsResult()
 void MainWindow::getVehicleLanguage()
 {
     Json::Value root = hmi_info["getVehicleLanguage"];
+    root["getVehicleLanguageRequest"]["transactionId"] = std::to_string(++vdc_transactionId);
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -423,7 +432,7 @@ void MainWindow::getVehicleLanguage()
 void MainWindow::setPreferencesVehicle()
 {
     Json::Value root = hmi_info["setPreferencesVehicle"];
-    root["setPreferencesVehicleResponse"]["transactionId"] = transactionId;
+    root["setPreferencesVehicleResponse"]["transactionId"] = pivi_transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -432,7 +441,7 @@ void MainWindow::setPreferencesVehicle()
 void MainWindow::setTCsResult(const Json::Value &request)
 {
     Json::Value root = hmi_info["setTCsResult"];
-    root["setTCsResultResponse"]["transactionId"] = transactionId;
+    root["setTCsResultResponse"]["transactionId"] = pivi_transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -442,7 +451,7 @@ void MainWindow::setTCsResult(const Json::Value &request)
 void MainWindow::setUpdateSchedule()
 {
     Json::Value root = hmi_info["setUpdateSchedule"];
-    root["setUpdateScheduleResponse"]["transactionId"] = transactionId;
+    root["setUpdateScheduleResponse"]["transactionId"] = pivi_transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -451,7 +460,7 @@ void MainWindow::setUpdateSchedule()
 void MainWindow::setSoftwareUpdateInstallImmediate()
 {
     Json::Value root = hmi_info["setSoftwareUpdateInstallImmediate"];
-    root["setSoftwareUpdateInstallImmediateResponse"]["transactionId"] = transactionId;
+    root["setSoftwareUpdateInstallImmediateResponse"]["transactionId"] = pivi_transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -468,7 +477,7 @@ void MainWindow::setUnscheduleUpdate()
 void MainWindow::setUpdateAuthorisation()
 {
     Json::Value root = hmi_info["setUpdateAuthorisation"];
-    root["setUpdateAuthorisationResponse"]["transactionId"] = transactionId;
+    root["setUpdateAuthorisationResponse"]["transactionId"] = pivi_transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -486,6 +495,7 @@ void MainWindow::setUpdateNotification()
 void MainWindow::StartFileTransfer()
 {
     Json::Value root = hmi_info["StartFileTransfer"];
+    root["startFileTransferRequest"]["header"]["transactionId"] = std::to_string(++vdc_transactionId);
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -494,6 +504,7 @@ void MainWindow::StartFileTransfer()
 void MainWindow::FileTransferStatus()
 {
     Json::Value root = hmi_info["FileTransferStatus"];
+    root["fileTransferStatusRequest"]["header"]["transactionId"] = std::to_string(++vdc_transactionId);
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -502,7 +513,7 @@ void MainWindow::FileTransferStatus()
 void MainWindow::FileTransferComplete()
 {
     Json::Value root = hmi_info["FileTransferComplete"];
-    root["fileTransferCompleteResponse"]["header"]["transactionId"] = transactionId;
+    root["fileTransferCompleteResponse"]["header"]["transactionId"] = pivi_transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -511,6 +522,7 @@ void MainWindow::FileTransferComplete()
 void MainWindow::StartInstall()
 {
     Json::Value root = hmi_info["InstallSoftware"];
+    root["installRequest"]["header"]["transactionId"] = std::to_string(++vdc_transactionId);
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -519,6 +531,7 @@ void MainWindow::StartInstall()
 void MainWindow::InstallStatus()
 {
     Json::Value root = hmi_info["InstallStatus"];
+    root["installStatusRequest"]["header"]["transactionId"] = std::to_string(++vdc_transactionId);
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -527,7 +540,7 @@ void MainWindow::InstallStatus()
 void MainWindow::InstallComplete()
 {
     Json::Value root = hmi_info["InstallComplete"];
-    root["installCompleteResponse"]["header"]["transactionId"] = transactionId;
+    root["installCompleteResponse"]["header"]["transactionId"] = pivi_transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -536,7 +549,7 @@ void MainWindow::InstallComplete()
 void MainWindow::ActivationComplete()
 {
     Json::Value root = hmi_info["ActivationComplete"];
-    root["activationCompleteResponse"]["header"]["transactionId"] = transactionId;
+    root["activationCompleteResponse"]["header"]["transactionId"] = pivi_transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));

@@ -77,7 +77,8 @@ private:
     Json::Value hmi_info;
     Json::StyledWriter styledWriter;
     std::string str;
-    std::string transactionId;
+    std::string pivi_transactionId;
+    int vdc_transactionId;
 
     QJsonObject jsonObj;
     QLineEdit *serverState;

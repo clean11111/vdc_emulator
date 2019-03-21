@@ -8,8 +8,7 @@
                     "campaignId": ["test"],
                     "originatorId": "test"
                 }
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "notifyUpdatesScheduledToInstall": {
@@ -17,8 +16,7 @@
             "interfaceVersion": "1.0",
             "messageData": [{
                 "campaignId": "test"
-            }],
-            "transactionId": "1000"
+            }]
         }
     },
     "notifyUpdatesToBeScheduled": {
@@ -26,8 +24,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "campaignId": "test"
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "notifyUserPresentChangeStatus": {
@@ -35,8 +32,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "userPresentInVehicle": "present"
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "notifyInstallationResult": {
@@ -44,8 +40,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "campaignId": "test"
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "notifyUpdatesChangeStatus": {
@@ -53,8 +48,7 @@
             "interfaceVersion": "1.0",
             "messageData": [{
                 "campaignId": "test"
-            }],
-            "transactionId": "1000"
+            }]
         }
     },
     "notifyVehicleChangeLanguage": {
@@ -186,8 +180,7 @@
     },
     "getVehicleLanguage": {
         "getVehicleLanguageRequest": {
-            "interfaceVersion": "1.0",
-            "transactionId": "1000"
+            "interfaceVersion": "1.0"
         }
     },
     "setPreferencesVehicle": {
@@ -241,8 +234,7 @@
     "StartFileTransfer": {
         "startFileTransferRequest": {
             "header": {
-                "interfaceVersion": "1.0",
-                "transactionId": "1000"
+                "interfaceVersion": "1.0"
             },
             "filePath": "/pivi_iccm/"
         }
@@ -250,8 +242,7 @@
     "FileTransferStatus": {
         "fileTransferStatusRequest": {
             "header": {
-                "interfaceVersion": "1.0",
-                "transactionId": "1000"
+                "interfaceVersion": "1.0"
             }
         }
     },
@@ -266,8 +257,7 @@
     "InstallSoftware": {
         "installRequest": {
             "header": {
-                "interfaceVersion": "1.0",
-                "transactionId": "1000"
+                "interfaceVersion": "1.0"
             },
             "softwarePartNumber": "String",
             "version": "String",
@@ -278,8 +268,7 @@
     "InstallStatus": {
         "installStatusRequest": {
             "header": {
-                "interfaceVersion": "1.0",
-                "transactionId": "1000"
+                "interfaceVersion": "1.0"
             }
         }
     },
