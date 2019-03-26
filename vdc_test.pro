@@ -33,5 +33,4 @@ HEADERS += \
 OTHER_FILES += json/*
 
 DISTFILES += \
-    json/hmi_info_array.json \
-    json/hmi_info_IP13_temp.json
+    json/hmi_info_array.json

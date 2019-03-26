@@ -52,9 +52,9 @@ public slots:
     void getSoftwareUpdateInformation();
     void getTCsResult();
     void getVehicleLanguage();
-    void setPreferencesVehicle();
+    void setPreferencesVehicle(const Json::Value &request);
     void setTCsResult(const Json::Value &request);
-    void setUpdateSchedule();
+    void setUpdateSchedule(const Json::Value &request);
     void setSoftwareUpdateInstallImmediate();
     void setUnscheduleUpdate();
     void setUpdateAuthorisation();

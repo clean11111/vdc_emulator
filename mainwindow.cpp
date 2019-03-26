@@ -1,6 +1,7 @@
 /* Version History
  * 1.9 : change softwarestatus value, when user touch notifyupdate message
  * 2.0 : add code to handle transactionId from VDC to PIVI
+ * 2.1 : add code to handle setpreferencevehicle / setupdateschedule
 */
 
 #include <QtWidgets>
@@ -244,11 +245,11 @@ void MainWindow::ParseEvent(const Json::Value &request)
     } else if(key.compare("getTCsResultRequest") == 0) {
         getTCsResult();
     } else if(key.compare("setPreferencesVehicleRequest") == 0) {
-        setPreferencesVehicle();
+        setPreferencesVehicle(request);
     } else if(key.compare("setTCsResultRequest") == 0) {
         setTCsResult(request);
     } else if(key.compare("setUpdateScheduleRequest") == 0) {
-        setUpdateSchedule();
+        setUpdateSchedule(request);
     } else if(key.compare("setSoftwareUpdateInstallImmediateRequest") == 0) {
         setSoftwareUpdateInstallImmediate();
     } else if(key.compare("setUnscheduleUpdateRequest") == 0) {
@@ -429,13 +430,15 @@ void MainWindow::getVehicleLanguage()
     sendText->setText(QString::fromStdString(str));
 }
 
-void MainWindow::setPreferencesVehicle()
+void MainWindow::setPreferencesVehicle(const Json::Value &request)
 {
     Json::Value root = hmi_info["setPreferencesVehicle"];
     root["setPreferencesVehicleResponse"]["transactionId"] = pivi_transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
+    hmi_info["getPreferencesVehicle"]["getPreferencesVehicleResponse"]["messageData"]["getPreferencesVehicleResponsePayload"]["preferencesVehicle"]["defaultInstallTime"]["defaultInstallStartTime"]["time"]["hh"] = request["setPreferencesVehicleRequest"]["messageData"]["preferencesVehicle"]["defaultInstallTime"]["defaultInstallStartTime"]["time"]["hh"];
+    hmi_info["getPreferencesVehicle"]["getPreferencesVehicleResponse"]["messageData"]["getPreferencesVehicleResponsePayload"]["preferencesVehicle"]["defaultInstallTime"]["defaultInstallStartTime"]["time"]["mm"] = request["setPreferencesVehicleRequest"]["messageData"]["preferencesVehicle"]["defaultInstallTime"]["defaultInstallStartTime"]["time"]["mm"];
 }
 
 void MainWindow::setTCsResult(const Json::Value &request)
@@ -448,13 +451,15 @@ void MainWindow::setTCsResult(const Json::Value &request)
     hmi_info["getTCsResult"]["getTCsResultResponse"]["messageData"]["getTCsResultResponsePayload"]["TCsStatus"] = request["setTCsResultRequest"]["messageData"]["TCsStatus"];
 }
 
-void MainWindow::setUpdateSchedule()
+void MainWindow::setUpdateSchedule(const Json::Value &request)
 {
     Json::Value root = hmi_info["setUpdateSchedule"];
     root["setUpdateScheduleResponse"]["transactionId"] = pivi_transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
+    hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["campaignSchedule"] = request["setUpdateScheduleRequest"]["messageData"]["setUpdateScheduleRequestPayload"]["schedule"];
+    hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["campaignStartDate"] = request["setUpdateScheduleRequest"]["messageData"]["setUpdateScheduleRequestPayload"]["schedule"];
 }
 
 void MainWindow::setSoftwareUpdateInstallImmediate()
