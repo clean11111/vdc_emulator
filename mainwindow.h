@@ -42,7 +42,8 @@ public slots:
     void notifyUpdatesScheduled();
     void notifyUpdatesScheduledToInstall();
     void notifyUpdatesToBeScheduled();
-    void notifyUserPresentChangeStatus();
+    void notifyUserPresentChangeStatus_on();
+    void notifyUserPresentChangeStatus_off();
     void notifyInstallationResult();
     void notifyUpdatesChangeStatus();
     void notifyVehicleLanguageChange();
@@ -93,7 +94,8 @@ private:
     QPushButton *notifyUpdatesScheduledButton;
     QPushButton *notifyUpdatesScheduledToInstallButton;
     QPushButton *notifyUpdatesToBeScheduledButton;
-    QPushButton *notifyUserPresentChangeStatusButton;
+    QPushButton *notifyUserPresentChangeStatusButton_on;
+    QPushButton *notifyUserPresentChangeStatusButton_off;
     QPushButton *notifyInstallationResultButton;
     QPushButton *notifyUpdatesChangeStatusButton;
     QPushButton *notifyVehicleLanguageChangeButton;

@@ -141,7 +141,7 @@
                                 "campaignTCs": ["test"],
                                 "campaignInformationURL": "test",
                                 "campaignInstallNotCommencedReason": "test",
-                                "softwareUpdateStatus": "toBeScheduled",
+                                "softwareUpdateStatus": "inProgress",
                                 "estimatedInstallationTime": {
                                     "time": {
                                         "hh": 12,

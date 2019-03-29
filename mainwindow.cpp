@@ -1,7 +1,8 @@
 /* Version History
  * 1.9 : change softwarestatus value, when user touch notifyupdate message
  * 2.0 : add code to handle transactionId from VDC to PIVI
- * 2.1 : add code to handle setpreferencevehicle / setupdateschedule
+ * 2.1 : add code to handle setpreferencevehicle / setupdateschedule / when Test button is pushed, softwareupdatestatus is changed
+ * 2.2 : add button for userpresentstatus / change authorise status as true when NotifyUpdatesScheduledToInstall or NotifyUpdateScheduled
 */
 
 #include <QtWidgets>
@@ -51,7 +52,8 @@ MainWindow::MainWindow(QWidget *parent)
     notifyUpdatesScheduledButton = new QPushButton(tr("&NotifyUpdateScheduled"));
     notifyUpdatesScheduledToInstallButton = new QPushButton(tr("&NotifyUpdatesScheduledToInstall"));
     notifyUpdatesToBeScheduledButton = new QPushButton(tr("&NotifyUpdatesToBeScheduled"));
-    notifyUserPresentChangeStatusButton = new QPushButton(tr("&NotifyUserPresentChangeStatus"));
+    notifyUserPresentChangeStatusButton_on = new QPushButton(tr("&NotifyUserPresentChangeStatus(ON)"));
+    notifyUserPresentChangeStatusButton_off = new QPushButton(tr("&NotifyUserPresentChangeStatus(OFF)"));
     notifyInstallationResultButton = new QPushButton(tr("&NotifyInstallationResult"));
     notifyUpdatesChangeStatusButton = new QPushButton(tr("&NotifyUpdatesChangeStatus"));
     notifyVehicleLanguageChangeButton = new QPushButton(tr("&NotifyVehicleLanguageChange"));
@@ -67,7 +69,8 @@ MainWindow::MainWindow(QWidget *parent)
     HMIbuttonLayout->addWidget(notifyUpdatesScheduledButton);
     HMIbuttonLayout->addWidget(notifyUpdatesScheduledToInstallButton);
     HMIbuttonLayout->addWidget(notifyUpdatesToBeScheduledButton);
-    HMIbuttonLayout->addWidget(notifyUserPresentChangeStatusButton);
+    HMIbuttonLayout->addWidget(notifyUserPresentChangeStatusButton_on);
+    HMIbuttonLayout->addWidget(notifyUserPresentChangeStatusButton_off);
     HMIbuttonLayout->addWidget(notifyInstallationResultButton);
     HMIbuttonLayout->addWidget(notifyUpdatesChangeStatusButton);
     HMIbuttonLayout->addWidget(notifyVehicleLanguageChangeButton);
@@ -78,7 +81,6 @@ MainWindow::MainWindow(QWidget *parent)
     HMIbuttonLayout->addWidget(getTCsResultButton);
     HMIbuttonLayout->addWidget(getVehicleLanguageButton);
     HMIbuttonLayout->addWidget(setPreferencesVehicleButton);
-    HMIbuttonLayout->addWidget(setTCsResultButton);
     HMIbuttonLayout->addStretch();
 
     QVBoxLayout *SystembuttonLayout = new QVBoxLayout;
@@ -90,6 +92,7 @@ MainWindow::MainWindow(QWidget *parent)
     InstallCompleteButton = new QPushButton(tr("&InstallComplete"));
     ActivationCompleteButton = new QPushButton(tr("&ActivationComplete"));
     TestButton = new QPushButton(tr("&Test"));
+    SystembuttonLayout->addWidget(setTCsResultButton);
     SystembuttonLayout->addWidget(StartFileTransferButton);
     SystembuttonLayout->addWidget(FileTransferStatusButton);
     SystembuttonLayout->addWidget(FileTransferCompleteButton);
@@ -126,7 +129,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(notifyUpdatesScheduledButton, SIGNAL(clicked()), this, SLOT(notifyUpdatesScheduled()));
     connect(notifyUpdatesScheduledToInstallButton, SIGNAL(clicked()), this, SLOT(notifyUpdatesScheduledToInstall()));
     connect(notifyUpdatesToBeScheduledButton, SIGNAL(clicked()), this, SLOT(notifyUpdatesToBeScheduled()));
-    connect(notifyUserPresentChangeStatusButton, SIGNAL(clicked()), this, SLOT(notifyUserPresentChangeStatus()));
+    connect(notifyUserPresentChangeStatusButton_on, SIGNAL(clicked()), this, SLOT(notifyUserPresentChangeStatus_on()));
+    connect(notifyUserPresentChangeStatusButton_off, SIGNAL(clicked()), this, SLOT(notifyUserPresentChangeStatus_off()));
     connect(notifyInstallationResultButton, SIGNAL(clicked()), this, SLOT(notifyInstallationResult()));
     connect(notifyUpdatesChangeStatusButton, SIGNAL(clicked()), this, SLOT(notifyUpdatesChangeStatus()));
     connect(notifyVehicleLanguageChangeButton, SIGNAL(clicked()), this, SLOT(notifyVehicleLanguageChange()));
@@ -318,6 +322,7 @@ void MainWindow::notifyUpdatesScheduled()
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
     hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["softwareUpdateStatus"] = "scheduled";
+    hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["authorisationStatus"] = "authorised";
 }
 
 void MainWindow::notifyUpdatesScheduledToInstall()
@@ -328,6 +333,7 @@ void MainWindow::notifyUpdatesScheduledToInstall()
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
     hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["softwareUpdateStatus"] = "toBeRescheduled";
+    hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["authorisationStatus"] = "authorised";
 }
 
 void MainWindow::notifyUpdatesToBeScheduled()
@@ -340,10 +346,21 @@ void MainWindow::notifyUpdatesToBeScheduled()
     hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["softwareUpdateStatus"] = "toBeScheduled";
 }
 
-void MainWindow::notifyUserPresentChangeStatus()
+void MainWindow::notifyUserPresentChangeStatus_on()
 {
     Json::Value root = hmi_info["notifyUserPresentChangeStatus"];
     root["notifyUserPresentChangeStatusRequest"]["transactionId"] = std::to_string(++vdc_transactionId);
+    root["notifyUserPresentChangeStatusRequest"]["messageData"]["userPresentInVehicle"] = "present";
+    str = styledWriter.write(root);
+    sendText->clear();
+    sendText->setText(QString::fromStdString(str));
+}
+
+void MainWindow::notifyUserPresentChangeStatus_off()
+{
+    Json::Value root = hmi_info["notifyUserPresentChangeStatus"];
+    root["notifyUserPresentChangeStatusRequest"]["transactionId"] = std::to_string(++vdc_transactionId);
+    root["notifyUserPresentChangeStatusRequest"]["messageData"]["userPresentInVehicle"] = "notPresent";
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -566,4 +583,5 @@ void MainWindow::Test()
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
+    hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["softwareUpdateStatus"] = "inProgress";
 }
