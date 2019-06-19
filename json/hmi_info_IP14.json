@@ -6,7 +6,7 @@
             "messageData": {
                 "notifyUpdatesScheduledRequestPayload": {
                     "campaignId": ["test"],
-                    "originatorId": "test"
+                    "originatorId": "PIVI"
                 }
             }
         }

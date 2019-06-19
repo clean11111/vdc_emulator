@@ -239,40 +239,57 @@ void MainWindow::ParseEvent(const Json::Value &request)
     qDebug() << QString::fromStdString(key) << " " << QString::fromStdString(pivi_transactionId);
 
     if(key.compare("getCurrentSOTAInstalledSoftwareRequest") == 0) {
+        pivi_transactionId = request[key]["transactionId"].asString();
         getCurrentSOTAInstalledSoftware();
     } else if(key.compare("getInstallationResultRequest") == 0) {
+        pivi_transactionId = request[key]["transactionId"].asString();
         getInstallationResult();
     } else if(key.compare("getPreferencesVehicleRequest") == 0) {
+        pivi_transactionId = request[key]["transactionId"].asString();
         getPreferencesVehicle();
     } else if(key.compare("getSoftwareUpdateInformationRequest") == 0) {
+        pivi_transactionId = request[key]["transactionId"].asString();
         getSoftwareUpdateInformation();
     } else if(key.compare("getTCsResultRequest") == 0) {
+        pivi_transactionId = request[key]["transactionId"].asString();
         getTCsResult();
     } else if(key.compare("setPreferencesVehicleRequest") == 0) {
+        pivi_transactionId = request[key]["transactionId"].asString();
         setPreferencesVehicle(request);
     } else if(key.compare("setTCsResultRequest") == 0) {
+        pivi_transactionId = request[key]["transactionId"].asString();
         setTCsResult(request);
     } else if(key.compare("setUpdateScheduleRequest") == 0) {
+        pivi_transactionId = request[key]["transactionId"].asString();
         setUpdateSchedule(request);
     } else if(key.compare("setSoftwareUpdateInstallImmediateRequest") == 0) {
+        pivi_transactionId = request[key]["transactionId"].asString();
         setSoftwareUpdateInstallImmediate();
     } else if(key.compare("setUnscheduleUpdateRequest") == 0) {
+        pivi_transactionId = request[key]["transactionId"].asString();
         setUnscheduleUpdate();
     } else if(key.compare("setUpdateAuthorisationRequest") == 0) {
+        pivi_transactionId = request[key]["transactionId"].asString();
         setUpdateAuthorisation();
     } else if(key.compare("setUpdateNotificationRequest") == 0) {
+        pivi_transactionId = request[key]["transactionId"].asString();
         setUpdateNotification();
-    } else if(key.compare("FileTransferCompleteRequest") == 0) {
+    } else if(key.compare("fileTransferCompleteRequest") == 0) {
+        pivi_transactionId = request[key]["header"]["transactionId"].asString();
         FileTransferComplete();
     } else if(key.compare("notifyVehicleLanguageChangeRequest") == 0) {
+        pivi_transactionId = request[key]["transactionId"].asString();
         notifyVehicleLanguageChange();
-    } else if(key.compare("InstallCompleteRequest") == 0) {
+    } else if(key.compare("installCompleteRequest") == 0) {
+        pivi_transactionId = request[key]["header"]["transactionId"].asString();
         InstallComplete();
     } else if(key.compare("activationCompleteRequest") == 0) {
+        pivi_transactionId = request[key]["header"]["transactionId"].asString();
         ActivationComplete();
     } else {
         return;
     }
+
     SendWSMessage();
 }
 
