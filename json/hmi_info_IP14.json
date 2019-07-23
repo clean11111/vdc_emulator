@@ -148,7 +148,7 @@
                                         "mm": 34
                                     }
                                 },
-                                "authorisationStatus": "notAuthorised",
+                                "authorisationStatus": "authorised",
                                 "vehicleSchedulePreference": "true",
                                 "campaignVersionNumber": "test",
                                 "campaignFileSize": "test",
@@ -172,7 +172,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "getTCsResultResponsePayload": {
-                    "TCsStatus": "reject",
+                    "TCsStatus": "accept",
                     "errorGeneralErrorResponse": "noError"
                 }
             }

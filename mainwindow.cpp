@@ -494,6 +494,7 @@ void MainWindow::setUpdateSchedule(const Json::Value &request)
     sendText->setText(QString::fromStdString(str));
     hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["campaignSchedule"] = request["setUpdateScheduleRequest"]["messageData"]["setUpdateScheduleRequestPayload"]["schedule"];
     hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["campaignStartDate"] = request["setUpdateScheduleRequest"]["messageData"]["setUpdateScheduleRequestPayload"]["schedule"];
+    hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["softwareUpdateStatus"] = "toBeRescheduled";
 }
 
 void MainWindow::setSoftwareUpdateInstallImmediate()
@@ -508,9 +509,11 @@ void MainWindow::setSoftwareUpdateInstallImmediate()
 void MainWindow::setUnscheduleUpdate()
 {
     Json::Value root = hmi_info["setUnscheduleUpdate"];
+    root["setUnscheduleUpdateResponse"]["transactionId"] = pivi_transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
+    hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["softwareUpdateStatus"] = "toBeScheduled";
 }
 
 void MainWindow::setUpdateAuthorisation()
