@@ -4,6 +4,7 @@
  * 2.1 : add code to handle setpreferencevehicle / setupdateschedule / when Test button is pushed, softwareupdatestatus is changed
  * 2.2 : add button for userpresentstatus / change authorise status as true when NotifyUpdatesScheduledToInstall or NotifyUpdateScheduled
  * 2.5 : add set truansactionId for unschedule message
+ * 2.6 : modify code about setauthorisation logic
 */
 
 #include <QtWidgets>
@@ -249,7 +250,7 @@ void MainWindow::ParseEvent(const Json::Value &request)
         pivi_transactionId = request[key]["transactionId"].asString();
         getPreferencesVehicle();
     } else if(key.compare("getSoftwareUpdateInformationRequest") == 0) {
-        //pivi_transactionId = request[key]["transactionId"].asString();
+        pivi_transactionId = request[key]["transactionId"].asString();
         getSoftwareUpdateInformation();
     } else if(key.compare("getTCsResultRequest") == 0) {
         pivi_transactionId = request[key]["transactionId"].asString();
@@ -295,7 +296,6 @@ void MainWindow::ParseEvent(const Json::Value &request)
         return;
     }
 
-    sleep(2);
     SendWSMessage();
 }
 
