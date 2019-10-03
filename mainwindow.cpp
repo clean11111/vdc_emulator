@@ -3,6 +3,7 @@
  * 2.0 : add code to handle transactionId from VDC to PIVI
  * 2.1 : add code to handle setpreferencevehicle / setupdateschedule / when Test button is pushed, softwareupdatestatus is changed
  * 2.2 : add button for userpresentstatus / change authorise status as true when NotifyUpdatesScheduledToInstall or NotifyUpdateScheduled
+ * 2.5 : add set truansactionId for unschedule message
 */
 
 #include <QtWidgets>
@@ -248,7 +249,7 @@ void MainWindow::ParseEvent(const Json::Value &request)
         pivi_transactionId = request[key]["transactionId"].asString();
         getPreferencesVehicle();
     } else if(key.compare("getSoftwareUpdateInformationRequest") == 0) {
-        pivi_transactionId = request[key]["transactionId"].asString();
+        //pivi_transactionId = request[key]["transactionId"].asString();
         getSoftwareUpdateInformation();
     } else if(key.compare("getTCsResultRequest") == 0) {
         pivi_transactionId = request[key]["transactionId"].asString();
@@ -270,7 +271,11 @@ void MainWindow::ParseEvent(const Json::Value &request)
         setUnscheduleUpdate();
     } else if(key.compare("setUpdateAuthorisationRequest") == 0) {
         pivi_transactionId = request[key]["transactionId"].asString();
-        setUpdateAuthorisation();
+        if(request[key]["messageData"]["driverAuthorisationResponse"].asString().compare("agree") == 0) {
+            setUpdateAuthorisation(true);
+        } else {
+            setUpdateAuthorisation(false);
+        }
     } else if(key.compare("setUpdateNotificationRequest") == 0) {
         pivi_transactionId = request[key]["transactionId"].asString();
         setUpdateNotification();
@@ -290,6 +295,7 @@ void MainWindow::ParseEvent(const Json::Value &request)
         return;
     }
 
+    sleep(2);
     SendWSMessage();
 }
 
@@ -516,14 +522,19 @@ void MainWindow::setUnscheduleUpdate()
     hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["softwareUpdateStatus"] = "toBeScheduled";
 }
 
-void MainWindow::setUpdateAuthorisation()
+void MainWindow::setUpdateAuthorisation(const bool &value)
 {
     Json::Value root = hmi_info["setUpdateAuthorisation"];
     root["setUpdateAuthorisationResponse"]["transactionId"] = pivi_transactionId;
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
-    hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["authorisationStatus"] = "authorised";
+    if(value == true) {
+        hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["authorisationStatus"] = "authorised";
+    } else {
+        qDebug() << "test2";
+        hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["authorisationStatus"] = "notAuthorised";
+    }
 }
 
 void MainWindow::setUpdateNotification()

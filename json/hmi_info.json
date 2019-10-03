@@ -1,13 +1,14 @@
 {
-    "portnumber" : 80,
+    "portnumber" : 130,
     "notifyUpdatesScheduled": {
         "notifyUpdatesScheduledRequest": {
             "interfaceVersion": "1.0",
             "messageData": {
-                "campaignId": ["test"],
-                "originatorId": "test"
-            },
-            "transactionId": "1000"
+                "notifyUpdatesScheduledRequestPayload": {
+                    "campaignId": ["test"],
+                    "originatorId": "PIVI"
+                }
+            }
         }
     },
     "notifyUpdatesScheduledToInstall": {
@@ -15,8 +16,7 @@
             "interfaceVersion": "1.0",
             "messageData": [{
                 "campaignId": "test"
-            }],
-            "transactionId": "1000"
+            }]
         }
     },
     "notifyUpdatesToBeScheduled": {
@@ -24,8 +24,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "campaignId": "test"
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "notifyUserPresentChangeStatus": {
@@ -33,8 +32,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "userPresentInVehicle": "present"
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "notifyInstallationResult": {
@@ -42,8 +40,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "campaignId": "test"
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "notifyUpdatesChangeStatus": {
@@ -51,8 +48,7 @@
             "interfaceVersion": "1.0",
             "messageData": [{
                 "campaignId": "test"
-            }],
-            "transactionId": "1000"
+            }]
         }
     },
     "notifyVehicleChangeLanguage": {
@@ -60,8 +56,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "errorGeneralErrorResponse": "noError"
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "getCurrentSOTAInstalledSoftware": {
@@ -70,18 +65,13 @@
             "messageData": {
                 "getCurrentSOTAInstalledSoftwareResponsePayload": {
                     "currentSoftwareComponent": [{
-                            "publisherName": "test",
-                            "installDate": "2018-12-31T09:29+00:00",
-                            "name": "test",
-                            "campaignLongDescription": ["test"],
-                            "campaignSummary": ["test"]
-                        },
-                        {
-                            "publisherName": "test",
-                            "installDate": "2018-12-31T09:29+00:00",
-                            "name": "test",
-                            "campaignLongDescription": ["test"],
-                            "campaignSummary": ["test"]
+                            "installedSOTAComponentDetails": {
+                                "publisherName": "test",
+                                "installDate": "2018-12-31T09:29+00:00",
+                                "name": "test",
+                                "campaignLongDescription": ["test"],
+                                "campaignSummary": ["test"]
+                            }
                         }
                     ],
                     "JLRLegalDetails" : {
@@ -93,8 +83,7 @@
                     },
                     "errorGeneralErrorResponse": "noError"
                 }
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "getInstallationResult": {
@@ -105,31 +94,14 @@
                     "softwareUpdateInstallationResultDetails": {
                         "campaignId": "test",
                         "campaignDescription": ["test"],
-                        "campaignInstallationResultType": "failed",
+                        "campaignInstallationResultType": "complete",
                         "installationNotAttemptedReason": "test",
                         "errorInstallFailureDriveableStatus": "nonDrivable",
                         "campaignName": "test"
                     },
                     "errorGeneralErrorResponse": "noError"
                 }
-            },
-            "transactionId": "1000"
-        }
-    },
-    "getJLRContactDetails": {
-        "getJLRContactDetailsResponse": {
-            "interfaceVersion": "1.0",
-            "messageData": {
-                "getJLRContactDetailsResponsePayload": {
-                    "JLRContactDetails": {
-                        "contactJLREmail": "test",
-                        "contactJLRPhoneNumber": "test",
-                        "contactJLRRegion": "test"
-                    },
-                    "errorGeneralErrorResponse": "noError"
-                }
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "getPreferencesVehicle": {
@@ -150,8 +122,7 @@
                     },
                     "errorGeneralErrorResponse": "noError"
                 }
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "getSoftwareUpdateInformation": {
@@ -170,36 +141,30 @@
                                 "campaignTCs": ["test"],
                                 "campaignInformationURL": "test",
                                 "campaignInstallNotCommencedReason": "test",
-                                "conditionsForInstall": ["test"],
-                                "softwareUpdateStatus": "toBeScheduled",
+                                "softwareUpdateStatus": "inProgress",
                                 "estimatedInstallationTime": {
                                     "time": {
                                         "hh": 12,
                                         "mm": 34
                                     }
                                 },
-                                "authorisationStatus": "notAuthorised",
+                                "authorisationStatus": "notSelected",
                                 "vehicleSchedulePreference": "true",
                                 "campaignVersionNumber": "test",
                                 "campaignFileSize": "test",
                                 "campaignPublisher": "test",
                                 "campaignDescription": ["test"],
                                 "campaignSummary": ["test"],
-                                "campaignEndDate": "2018-12-31T09:29+00:00",
-                                "campaignSchedule": "2018-12-31T09:29+00:00",
-                                "campaignStartDate": "2018-12-31T09:29+00:00",
-                                "installationStartTime": "2018-12-31T09:29+00:00",
-                                "proposedInstallationTime": "2018-12-31T09:29+00:00",
-                                "conditionsForInstall": [
-                                  "ut exercitation Excepteur culpa irure"
-                                ]
+                                "campaignEndDate": "2018-12-31T09:29+07:00",
+                                "campaignSchedule": "2018-12-31T09:29+07:00",
+                                "campaignStartDate": "2018-12-31T09:29+07:00",
+                                "proposedInstallationTime": "idle"
                             }
                         }
                     ],
                     "errorGeneralErrorResponse": "noError"
                 }
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "getTCsResult": {
@@ -207,17 +172,15 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "getTCsResultResponsePayload": {
-                    "TCsStatus": "reject",
+                    "TCsStatus": "accept",
                     "errorGeneralErrorResponse": "noError"
                 }
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "getVehicleLanguage": {
         "getVehicleLanguageRequest": {
-            "interfaceVersion": "1.0",
-            "transactionId": "1000"
+            "interfaceVersion": "1.0"
         }
     },
     "setPreferencesVehicle": {
@@ -225,8 +188,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "errorGeneralErrorResponse": "noError"
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "setTCsResult": {
@@ -234,8 +196,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "errorGeneralErrorResponse": "noError"
-            },
-            "transactionId": "1000"
+            }
         }
     },
     "setUpdateSchedule": {
@@ -243,9 +204,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "errorGeneralErrorResponse": "noError"
-            },
-            "transactionId": "1000"
-
+            }
         }
     },
     "setSoftwareUpdateInstallImmediate": {
@@ -253,9 +212,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "errorGeneralErrorResponse": "noError"
-            },
-            "transactionId": "1000"
-
+            }
         }
     },
     "setUnscheduleUpdate": {
@@ -263,9 +220,7 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "errorGeneralErrorResponse": "noError"
-            },
-            "transactionId": "1000"
-
+            }
         }
     },
     "setUpdateAuthorisation": {
@@ -273,43 +228,28 @@
             "interfaceVersion": "1.0",
             "messageData": {
                 "errorGeneralErrorResponse": "noError"
-            },
-            "transactionId": "1000"
-
-        }
-    },
-    "setUpdateNotification": {
-        "setUpdateNotificationResponse": {
-            "interfaceVersion": "1.0",
-            "messageData": {
-                "errorGeneralErrorResponse": "noError"
-            },
-            "transactionId": "1000"
-
+            }
         }
     },
     "StartFileTransfer": {
         "startFileTransferRequest": {
             "header": {
-                "interfaceVersion": "1.0",
-                "transactionId": "1000"
+                "interfaceVersion": "1.0"
             },
-            "filePath": "/Swupgrade.tar.gz"
+            "filePath": "/pivi_iccm/"
         }
     },
     "FileTransferStatus": {
         "fileTransferStatusRequest": {
             "header": {
-                "interfaceVersion": "1.0",
-                "transactionId": "1000"
+                "interfaceVersion": "1.0"
             }
         }
     },
     "FileTransferComplete": {
         "fileTransferCompleteResponse": {
             "header": {
-                "interfaceVersion": "1.0",
-                "transactionId": "1000"
+                "interfaceVersion": "1.0"
             },
             "response": "OK"
         }
@@ -317,8 +257,7 @@
     "InstallSoftware": {
         "installRequest": {
             "header": {
-                "interfaceVersion": "1.0",
-                "transactionId": "1000"
+                "interfaceVersion": "1.0"
             },
             "softwarePartNumber": "String",
             "version": "String",
@@ -329,16 +268,14 @@
     "InstallStatus": {
         "installStatusRequest": {
             "header": {
-                "interfaceVersion": "1.0",
-                "transactionId": "1000"
+                "interfaceVersion": "1.0"
             }
         }
     },
     "InstallComplete": {
         "installCompleteResponse": {
             "header": {
-                "interfaceVersion": "1.0",
-                "transactionId": "1000"
+                "interfaceVersion": "1.0"
             },
             "response": "OK"
         }
@@ -346,8 +283,7 @@
     "ActivationComplete": {
         "activationCompleteResponse": {
             "header": {
-                "interfaceVersion": "1.0",
-                "transactionId": "1000"
+                "interfaceVersion": "1.0"
             }
         },
         "result": "OK"
@@ -357,7 +293,8 @@
             "header": {
                 "interfaceVersion": "1.0",
                 "transactionId": "1000"
-            }
+            },
+            "inputdata" : "vehicle_keyoff=newupdate"
         }
     }
 }

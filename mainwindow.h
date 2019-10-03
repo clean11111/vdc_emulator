@@ -58,7 +58,7 @@ public slots:
     void setUpdateSchedule(const Json::Value &request);
     void setSoftwareUpdateInstallImmediate();
     void setUnscheduleUpdate();
-    void setUpdateAuthorisation();
+    void setUpdateAuthorisation(const bool &value);
     void setUpdateNotification();
     void StartFileTransfer();
     void FileTransferStatus();
