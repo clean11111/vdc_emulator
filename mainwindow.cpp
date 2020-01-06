@@ -5,6 +5,7 @@
  * 2.2 : add button for userpresentstatus / change authorise status as true when NotifyUpdatesScheduledToInstall or NotifyUpdateScheduled
  * 2.5 : add set truansactionId for unschedule message
  * 2.6 : modify code about setauthorisation logic
+ * 2.7 : If filetransfer or install is finished, next step will be called automatically / modify softwareUpdateStatus value
 */
 
 #include <QtWidgets>
@@ -283,12 +284,20 @@ void MainWindow::ParseEvent(const Json::Value &request)
     } else if(key.compare("fileTransferCompleteRequest") == 0) {
         pivi_transactionId = request[key]["header"]["transactionId"].asString();
         FileTransferComplete();
+        if(request[key]["response"].asString().compare("Success") == 0) {
+            SendWSMessage();
+            StartInstall();
+        }
     } else if(key.compare("notifyVehicleLanguageChangeRequest") == 0) {
         pivi_transactionId = request[key]["transactionId"].asString();
         notifyVehicleLanguageChange();
     } else if(key.compare("installCompleteRequest") == 0) {
         pivi_transactionId = request[key]["header"]["transactionId"].asString();
         InstallComplete();
+        if(request[key]["response"].asString().compare("Success") == 0) {
+            SendWSMessage();
+            notifyUpdatesToBeScheduled();
+        }
     } else if(key.compare("activationCompleteRequest") == 0) {
         pivi_transactionId = request[key]["header"]["transactionId"].asString();
         ActivationComplete();
@@ -355,7 +364,7 @@ void MainWindow::notifyUpdatesScheduledToInstall()
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
-    hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["softwareUpdateStatus"] = "toBeRescheduled";
+    hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["softwareUpdateStatus"] = "scheduled";
     hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["authorisationStatus"] = "authorised";
 }
 
@@ -402,6 +411,7 @@ void MainWindow::notifyUpdatesChangeStatus()
 {
     Json::Value root = hmi_info["notifyUpdatesChangeStatus"];
     root["notifyUpdatesChangeStatusRequest"]["transactionId"] = std::to_string(++vdc_transactionId);
+    hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["softwareUpdateStatus"] = "inProgress";
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -429,6 +439,12 @@ void MainWindow::getInstallationResult()
 {
     Json::Value root = hmi_info["getInstallationResult"];
     root["getInstallationResultResponse"]["transactionId"] = pivi_transactionId;
+    if(root["getInstallationResultResponse"]["messageData"]["softwareUpdateInstallationResultDetails"]["campaignInstallationResultType"].asString().compare("complete") == 0) {
+        hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["softwareUpdateStatus"] = "complete";
+    } else {
+        hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["softwareUpdateStatus"] = "toBeRescheduled";
+    }
+
     str = styledWriter.write(root);
     sendText->clear();
     sendText->setText(QString::fromStdString(str));
@@ -500,7 +516,7 @@ void MainWindow::setUpdateSchedule(const Json::Value &request)
     sendText->setText(QString::fromStdString(str));
     hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["campaignSchedule"] = request["setUpdateScheduleRequest"]["messageData"]["setUpdateScheduleRequestPayload"]["schedule"];
     hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["campaignStartDate"] = request["setUpdateScheduleRequest"]["messageData"]["setUpdateScheduleRequestPayload"]["schedule"];
-    hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["softwareUpdateStatus"] = "toBeRescheduled";
+    hmi_info["getSoftwareUpdateInformation"]["getSoftwareUpdateInformationResponse"]["messageData"]["getSoftwareUpdateInformationResponsePayload"]["softwareUpdateInformation"][0]["softwareUpdate"]["softwareUpdateStatus"] = "scheduled";
 }
 
 void MainWindow::setSoftwareUpdateInstallImmediate()
